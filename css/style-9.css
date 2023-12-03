@@ -489,7 +489,7 @@ a.underline {
   }
 
 .CardMissing {	/* Classe de mise en évidence d'une carte listé et manquant dans l'entrepot locale (localStorage) */
-	color : red;
+	color : red;	/* Nom de la carte en rouge dans la liste */
 }
 
 .notification>h3 {
