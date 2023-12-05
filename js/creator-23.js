@@ -5,8 +5,8 @@ St_unnamed ='unnamed';						// valeur utilisée plusieurs fois dans des tests
 St_unnamed ='SansNom';
 St_No_Mask ='No Mask';
 St_No_Mask ='Sans masque';
-St_Power_Toughness_EN = "Power/Toughness";
-St_Power_Toughness    = "Force/Endurance";
+St_Power_Toughness_EN = "Power/Toughness";	
+St_Power_Toughness    = "Force/Endurance";	// Nom saisie dans les JS de chaque définision de trames.
 
 
 
