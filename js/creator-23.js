@@ -5,6 +5,8 @@ St_unnamed ='unnamed';						// valeur utilisée plusieurs fois dans des tests
 St_unnamed ='SansNom';
 St_No_Mask ='No Mask';
 St_No_Mask ='Sans masque';
+St_Power_Toughness_EN = "Power/Toughness";
+St_Power_Toughness    = "Force/Endurance";
 
 
 
@@ -64,7 +66,9 @@ watermark.onerror = function () { if (!this.src.includes('/img/blank.png')) { th
 watermark.onload = watermarkEdited;
 //preview canvas
 var previewCanvas = document.querySelector('#previewCanvas');
-var previewContext = previewCanvas.getContext('2d');
+//var previewContext = previewCanvas.getContext('2d');
+	//GowaP: Alerte sur acces important sur le Canvas ; activation de l'accélération
+var previewContext = previewCanvas.getContext('2d',{ willReadFrequently: true});
 var canvasList = [];
 //frame/mask picker stuff
 var availableFrames = [];
@@ -133,7 +137,9 @@ async function resetCardIrregularities({ canvas = [1500, 2100, 0, 0], resetOther
 function sizeCanvas(name, width = Math.round(card.width * (1 + 2 * card.marginX)), height = Math.round(card.height * (1 + 2 * card.marginY))) {
 	if (!window[name + 'Canvas']) {
 		window[name + 'Canvas'] = document.createElement('canvas');
-		window[name + 'Context'] = window[name + 'Canvas'].getContext('2d');
+//		window[name + 'Context'] = window[name + 'Canvas'].getContext('2d');
+		//GowaP : activation de l'accès Fréquent du Canevas
+		window[name + 'Context'] = window[name + 'Canvas'].getContext('2d',{ willReadFrequently: true});
 		canvasList[canvasList.length] = name;
 	}
 	window[name + 'Canvas'].width = width;
@@ -355,8 +361,9 @@ function drawFrames() {
 	var frameToDraw = card.frames.slice().reverse();
 	var haveDrawnPrePTCanvas = false;
 	frameToDraw.forEach(item => {
-		if (item.image) {
-			if (!haveDrawnPrePTCanvas && drawTextBetweenFrames && item.name.includes('Power/Toughness')) {
+		if (item.image) {			// Fix: recherche text en langue EN uniquement
+			if (!haveDrawnPrePTCanvas && drawTextBetweenFrames && 
+					(item.name.includes(St_Power_Toughness) || item.name.includes(St_Power_Toughness_EN))) {
 				haveDrawnPrePTCanvas = true;
 				frameContext.globalCompositeOperation = 'source-over';
 				frameContext.globalAlpha = 1;
@@ -727,7 +734,9 @@ function hsl(canvas, inputH, inputS, inputL) {
 	var saturation = parseInt(inputS) / 100;
 	var lightness = parseInt(inputL) / 100;
 	//create needed objects
-	var context = canvas.getContext('2d')
+//	var context = canvas.getContext('2d');
+	//GowaP : activation de l'accès fréquent
+	var context = canvas.getContext('2d',{ willReadFrequently: true});
 	var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 	var pixels = imageData.data;
 	//for every pixel...
@@ -760,9 +769,13 @@ function hsl(canvas, inputH, inputS, inputL) {
 	context.putImageData(imageData, 0, 0);
 }
 function croppedCanvas(oldCanvas, sensitivity = 0) {
-	var oldContext = oldCanvas.getContext('2d');
+//	var oldContext = oldCanvas.getContext('2d');
+	//GowaP : accès fréquence au canevas
+var oldContext = oldCanvas.getContext('2d',{ willReadFrequently: true});
 	var newCanvas = document.createElement('canvas');
-	var newContext = newCanvas.getContext('2d');
+//	var newContext = newCanvas.getContext('2d');
+	//GowaP: accès fréquent
+	var newContext = newCanvas.getContext('2d',{ willReadFrequently: true});
 	var pixels = oldContext.getImageData(0, 0, oldCanvas.width, oldCanvas.height).data;
 	var pixX = [];
 	var pixY = [];
@@ -781,7 +794,9 @@ function croppedCanvas(oldCanvas, sensitivity = 0) {
 	var newHeight = 1 + pixY[n] - pixY[0];
 	newCanvas.width = newWidth;
 	newCanvas.height = newHeight;
-	newContext.putImageData(oldCanvas.getContext('2d').getImageData(pixX[0], pixY[0], newWidth, newHeight), 0, 0);
+//	newContext.putImageData(oldCanvas.getContext('2d').getImageData(pixX[0], pixY[0], newWidth, newHeight), 0, 0);
+	// GowaP: Accès fréquence au canevas
+newContext.putImageData(oldCanvas.getContext('2d',{ willReadFrequently: true}).getImageData(pixX[0], pixY[0], newWidth, newHeight), 0, 0);
 	return newCanvas;
 }
 /*
@@ -1324,7 +1339,9 @@ function writeText(textObject, targetContext) {
 					}
 					//fake shadow begins
 					var fakeShadow = lineCanvas.cloneNode();
-					var fakeShadowContext = fakeShadow.getContext('2d');
+//					var fakeShadowContext = fakeShadow.getContext('2d');
+	//GowaP : accès fréquence du canevas
+					var fakeShadowContext = fakeShadow.getContext('2d',{ willReadFrequently: true});
 					fakeShadowContext.clearRect(0, 0, fakeShadow.width, fakeShadow.height);
 					var backImage = null;
 					if (manaSymbol.backs) {
@@ -1475,7 +1492,9 @@ CanvasRenderingContext2D.prototype.fillImage = function (image, x, y, width, hei
 	var canvas = document.createElement('canvas');
 	canvas.width = width + margin * 2;
 	canvas.height = height + margin * 2;
-	var context = canvas.getContext('2d');
+//	var context = canvas.getContext('2d');
+	//GowaP: accès fréquence au canvas
+	var context = canvas.getContext('2d',{ willReadFrequently: true});
 	context.drawImage(image, margin, margin, width, height);
 	context.globalCompositeOperation = 'source-in';
 	context.fillStyle = pinlineColors(color);

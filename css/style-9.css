@@ -488,9 +488,27 @@ a.underline {
 	50%	{	background-color: var(--input-background);		}
   }
 
-.CardMissing {	/* Classe de mise en évidence d'une carte listé et manquant dans l'entrepot locale (localStorage) */
+.CardMissing {	/* Classe de mise en évidence d'une carte listée et manquant dans l'entrepôt locale (localStorage) */
 	color : red;	/* Nom de la carte en rouge dans la liste */
 }
+
+span.Help {		/* Text d'information / d'explication		*/
+	cursor: help;
+}
+
+
+/* GowaP : Mise en forme suite à l'ajout de la lettre H, S et L devant l'objet input */
+div.frame-editor-hsl > table {					/* encadrement dans un tableau de pleine largeur */
+	width: 100%;
+	}
+div.frame-editor-hsl table td:first-child {		/* formatage de la lettre 			*/
+	width: 1.25em;
+	font-size: 1.25em;
+  }
+  div.frame-editor-hsl table input {			/* centre la valeur d'indexation	*/
+	text-align: center;
+  }
+
 
 .notification>h3 {
 	text-align: center;
